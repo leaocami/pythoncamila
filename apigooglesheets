@@ -1,0 +1,26 @@
+from googleapiclient.discovery import build
+from google.oauth2 import service_account
+
+SERVICE_ACCOUNT_FILE = 'key-vtex-vix.json'
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
+
+creds = None
+creds = service_account.Credentials.from_service_account_file(
+SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+
+# The ID of a sample spreadsheet.
+SAMPLE_SPREADSHEET_ID = '1Wrk4asaW5sf2ZJLYr-N2xD2ygWPDyFLcvkfVh-fbXcU'
+
+service = build('sheets', 'v4', credentials=creds)
+
+# Call the Sheets API
+sheet = service.spreadsheets()
+result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
+                                range="Ontem!A1:C9").execute()
+
+values = result.get('values', [])
+
+request = sheet.values().update(spreadsheetId=SAMPLE_SPREADSHEET_ID, 
+                                range="Ontem!A2", valueInputOption="USER_ENTERED", body={"values":("Values", "Revenue", "AVG  Price"), ("vendas","receita","ticket")}.execute()
+
+print (request)
